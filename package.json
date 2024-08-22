@@ -1,0 +1,26 @@
+{
+  "name": "wallpaper-service",
+  "version": "1.0.0",
+  "private": true,
+  "author": {
+    "name": "Bruce Shih",
+    "email": "sp1986@gmail.com"
+  },
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "dev:remote": "wrangler dev --remote",
+    "cf-typegen": "wrangler types",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
+  },
+  "devDependencies": {
+    "@antfu/eslint-config": "^2.26.0",
+    "@cloudflare/vitest-pool-workers": "^0.4.23",
+    "@cloudflare/workers-types": "^4.20240815.0",
+    "eslint": "9.5.0",
+    "typescript": "^5.5.4",
+    "vitest": "1.5.0",
+    "wrangler": "^3.72.0"
+  }
+}
