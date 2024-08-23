@@ -66,6 +66,7 @@ export default {
           const headers = new Headers()
           image.writeHttpMetadata(headers)
           headers.set('etag', image.httpEtag)
+          headers.set('Image-Id', key)
           // set cache to 1 year
           headers.append('Cache-Control', 's-maxage=31536000')
 
