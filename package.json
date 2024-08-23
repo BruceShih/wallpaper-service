@@ -15,12 +15,12 @@
     "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
-    "@antfu/eslint-config": "^2.26.0",
-    "@cloudflare/vitest-pool-workers": "^0.4.23",
-    "@cloudflare/workers-types": "^4.20240815.0",
+    "@antfu/eslint-config": "^2.27.1",
+    "@cloudflare/vitest-pool-workers": "^0.4.25",
+    "@cloudflare/workers-types": "^4.20240821.1",
     "eslint": "9.5.0",
     "typescript": "^5.5.4",
     "vitest": "1.5.0",
-    "wrangler": "^3.72.0"
+    "wrangler": "^3.72.2"
   }
 }
