@@ -7,7 +7,7 @@ interface ImagesRow {
 }
 
 interface WallpaperServicePostBody {
-  favorite: 'true' | 'false'
+  favorite: boolean
 }
 
 function hasValidHeader(request: Request<unknown, IncomingRequestCfProperties<unknown>>, env: Env) {
@@ -99,7 +99,7 @@ export default {
         const body = await request.json<WallpaperServicePostBody>()
         // preparing sql statement
         const statement = await env.WALLPAPERS_DB.prepare('UPDATE images SET favorite = ? WHERE key = ?')
-          .bind(body.favorite === 'true' ? 1 : 0, key)
+          .bind(body.favorite === true ? 1 : 0, key)
           .run()
 
         if (!statement.success) {
