@@ -15,7 +15,7 @@ This is a simple wallpaper service that provides a random wallpaper using Cloudf
 5. It is recommended to setup a custom domain in Workers settings page and enable CORS in R2's settings.
 
 ```sql
-CREATE TABLE [images] ("key" text DEFAULT "" PRIMARY KEY,"alive" integer DEFAULT 1,"createDate" text DEFAULT "","deleteDate" text DEFAULT "");
+CREATE TABLE [images] ("key" text DEFAULT "" PRIMARY KEY,"alive" integer DEFAULT 1,"favorite" integer DEFAULT 0,"createDate" text DEFAULT "","deleteDate" text DEFAULT "");
 ```
 
 * `key` will be the name of the image file name as the primary key (so no duplicates)
@@ -94,6 +94,12 @@ curl --location <your-workers-domain>/<image-file-name> --header '<your-auth-key
 
 ```bash
 curl --location <your-workers-domain>/<image-file-name> --header '<your-auth-key>: <your-auth-key-value>' --header 'Content-Type: image/jpeg' --data '@<local-path-to-image-file>'
+```
+
+### Favorite a wallpaper
+
+```bash
+curl --location <your-workers-domain>/<image-file-name> --header '<your-auth-key>: <your-auth-key-value>' --header 'Content-Type: application/json' --data '{ "favorite": true }'
 ```
 
 * Note that `Content-Type` is based on the image you want to upload.
