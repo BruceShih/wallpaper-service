@@ -1,8 +1,13 @@
 interface ImagesRow {
   key: string
-  alive: boolean
+  alive: 0 | 1
+  favorite: 0 | 1
   createDate: string
   deleteDate: string
+}
+
+interface WallpaperServicePostBody {
+  favorite: 'true' | 'false'
 }
 
 function hasValidHeader(request: Request<unknown, IncomingRequestCfProperties<unknown>>, env: Env) {
@@ -11,8 +16,9 @@ function hasValidHeader(request: Request<unknown, IncomingRequestCfProperties<un
 
 function authorizeRequest(request: Request<unknown, IncomingRequestCfProperties<unknown>>, env: Env) {
   switch (request.method) {
-    case 'DELETE':
     case 'GET':
+    case 'POST':
+    case 'DELETE':
     case 'PUT':
       return hasValidHeader(request, env)
     default:
@@ -85,6 +91,30 @@ export default {
       }
     }
 
+    if (request.method === 'POST') {
+      try {
+        const key = url.pathname.slice(1)
+
+        // get request body
+        const body = await request.json<WallpaperServicePostBody>()
+        // preparing sql statement
+        const statement = await env.WALLPAPERS_DB.prepare('UPDATE images SET favorite = ? WHERE key = ?')
+          .bind(body.favorite === 'true' ? 1 : 0, key)
+          .run()
+
+        if (!statement.success) {
+          console.error('[Wallpaper Service] Database error', statement.error)
+          return new Response('Database error', { status: 500 })
+        }
+
+        return new Response('Image marked as favorite', { status: 200 })
+      }
+      catch (error) {
+        console.error('[Wallpaper Service] Error:', error)
+        return new Response('Internal Server Error', { status: 500 })
+      }
+    }
+
     if (request.method === 'DELETE') {
       try {
         const key = url.pathname.slice(1)
@@ -131,10 +161,9 @@ export default {
         await env.WALLPAPERS_BUCKET.put(key, request.body)
         // write to database
         const insertResult = await env.WALLPAPERS_DB.prepare(
-          'INSERT INTO images (key, alive, createDate, deleteDate) VALUES (?, ?, ?, ?)'
+          'INSERT INTO images (key, createDate, deleteDate) VALUES (?, ?, ?)'
         ).bind(
           key,
-          1,
           new Date().toISOString(),
           ''
         ).run()
