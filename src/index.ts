@@ -41,7 +41,6 @@ export default {
         let favorite = false
         key = url.pathname.slice(1).split('/')[0]
 
-        // if key is provided, just get the image
         if (key === '') {
           // get a random row from 'wallpapers.images' table
           const randomStatement = env.WALLPAPERS_DB.prepare('SELECT * FROM images WHERE alive = 1 ORDER BY RANDOM() LIMIT 1')
@@ -53,6 +52,20 @@ export default {
 
           key = randomRow.key
           favorite = randomRow.favorite === 1
+        }
+        else {
+          // get image by key
+          const row = await env.WALLPAPERS_DB.prepare(
+            'SELECT * FROM images WHERE key = ?'
+          ).bind(key).first<ImagesRow>()
+
+          if (!row) {
+            console.error('[Wallpaper Service] Image not found:', key)
+            return new Response('Image Not Found', { status: 404 })
+          }
+
+          key = row.key
+          favorite = row.favorite === 1
         }
 
         // make cache
