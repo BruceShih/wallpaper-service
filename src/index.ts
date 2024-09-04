@@ -38,6 +38,7 @@ export default {
     if (request.method === 'GET') {
       try {
         let key = ''
+        let favorite = false
         key = url.pathname.slice(1).split('/')[0]
 
         // if key is provided, just get the image
@@ -49,7 +50,9 @@ export default {
             console.error('[Wallpaper Service] No wallpapers found')
             return new Response('No wallpapers found', { status: 404 })
           }
+
           key = randomRow.key
+          favorite = randomRow.favorite === 1
         }
 
         // make cache
@@ -73,6 +76,7 @@ export default {
           image.writeHttpMetadata(headers)
           headers.set('etag', image.httpEtag)
           headers.set('Image-Id', key)
+          headers.set('Favorite', favorite.valueOf().toString())
           // set cache to 1 year
           headers.append('Cache-Control', 's-maxage=31536000')
 
