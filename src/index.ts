@@ -140,10 +140,8 @@ export default {
         await env.WALLPAPERS_BUCKET.delete(key)
         // update database
         const result = await env.WALLPAPERS_DB.prepare(
-          'UPDATE images SET alive = ?, deleteDate = ? WHERE key = ?'
+          'DELETE FROM images WHERE key = ?'
         ).bind(
-          0,
-          new Date().toISOString(),
           key
         ).run()
         if (result.success) {
