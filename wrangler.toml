@@ -1,8 +1,14 @@
 # :schema node_modules/wrangler/config-schema.json
 name = "wallpaper-service"
 main = "src/index.ts"
-compatibility_date = "2024-08-06"
+compatibility_date = "2024-09-05"
 compatibility_flags = [ "nodejs_compat" ]
+routes = [
+  { pattern = "wallpapers.bruceshih.me/get", zone_name = "bruceshih.me" },
+  { pattern = "wallpapers.bruceshih.me/upload", zone_name = "bruceshih.me" },
+  { pattern = "wallpapers.bruceshih.me/update", zone_name = "bruceshih.me" },
+  { pattern = "wallpapers.bruceshih.me/delete", zone_name = "bruceshih.me" },
+]
 
 # Automatically place your workloads in an optimal location to minimize latency.
 # If you are running back-end logic in a Worker, running it closer to your back-end infrastructure
